@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Blog</title>
+    <title>얼렁뚱땅 블로그</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <h1>얼렁뚱땅블로그</h1>
-    </header>
-    <div class="container">
-        <p>This is the home page of my new blog. More features coming soon!</p>
-    </div>
+    <main id="Home-Container">
+        <section class="Text-Container">
+            <p id="Blog-Name">얼렁뚱땅 블로그</p>
+            <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
+            <input id="Login-Button" type="button" value="로그인 하기"/>
+        </section>
+    </main>
 </body>
 </html>
