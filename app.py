@@ -14,6 +14,11 @@ def home():
     return render_template('home.html')
 # render_template 함수로 home.html 파일을 렌더링 하여 생성
 
+@app.route('/login')
+# url_for('login')에서 'login'은 여기서 정의된 login 함수와 연결된 URL
+def login():
+    return render_template('login.html')
+
 if __name__ == '__main__':
 # 현재 모듈이 main일 때만 실행.
     app.run(debug=True)
