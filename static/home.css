@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'HakgyoansimBadasseugi';
+    src: url('/static/fonts/Hakgyoansim Badasseugi TTF L.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'HakgyoansimChilpanjijgae';
+    src: url('/static/fonts/Hakgyoansim Chilpanjiugae TTF L.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('/static/fonts/PretendardVariable.ttf') format('truetype');
+}
+
+body {
+    height: 729px;
+    margin: 0;
+    padding: 0;
+    background-color: #E2F5FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Home-Container {
+    width: 1000px;
+    height: 580px;
+    border-radius: 20px;
+    background: rgba(180, 219, 255, 0.40);
+    box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#Blog-Name {
+    font-family: 'HakgyoansimChilpanjijgae', sans-serif;
+    color: #0E0E0E;
+    font-size: 70px;
+    font-weight: 600;
+    margin: 0;
+}
+
+#Blog-Slogan {
+    color: #0E0E0E;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+#Login-Button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Pretendard', sans-serif;
+    width: 130px;
+    height: 40px;
+    border: none;
+    border-radius: 40px;
+    background: #FFF;
+    box-shadow: 0px 0px 15px 0px rgba(25, 104, 255, 0.20);
+}
+
+.Text-Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
