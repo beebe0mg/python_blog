@@ -14,8 +14,16 @@ def home():
     return render_template('home.html')
 # render_template 함수로 home.html 파일을 렌더링 하여 생성
 
+@app.route('/start')
+# url_for('start')에서 'start'는 여기서 정의된 start 함수와 연결된 URL
+def start():
+    return render_template('start.html')
+
+@app.route('/join')
+def join():
+    return render_template('join.html')
+
 @app.route('/login')
-# url_for('login')에서 'login'은 여기서 정의된 login 함수와 연결된 URL
 def login():
     return render_template('login.html')
 
