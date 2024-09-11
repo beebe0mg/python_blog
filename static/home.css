@@ -52,6 +52,7 @@ body {
 
 #Start-Button {
     display: flex;
+    font-size: 12px;
     justify-content: center;
     align-items: center;
     font-family: 'Pretendard', sans-serif;
