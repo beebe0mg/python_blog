@@ -6,12 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>얼렁뚱땅 블로그</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='join.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
     <main id="Home-Container">
         <section class="Text-Container">
             <p id="Blog-Name">얼렁뚱땅 블로그</p>
             <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
+        </section>
+        <section class="Input-Container">
+            <input id="Input-Email" type="Text" placeholder="이메일을 입력해주세요"/>
+            <input id="Input-Password" type="Password" placeholder="비밀번호를 입력해주세요"/>
+        </section>
+        <section class="Image-Container">
+            <i class="bi bi-folder2-open"></i>
+            <p>전문가 인증 이미지 추가</p>
         </section>
         <section class="Button-Container"> 
             <input id="Join-Button" type="button" value="회원 가입"/>

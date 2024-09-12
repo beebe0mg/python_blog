@@ -1,0 +1,133 @@
+@font-face {
+    font-family: 'HakgyoansimBadasseugi';
+    src: url('/static/fonts/Hakgyoansim Badasseugi TTF L.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'HakgyoansimChilpanjijgae';
+    src: url('/static/fonts/Hakgyoansim Chilpanjiugae TTF L.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('/static/fonts/PretendardVariable.ttf') format('truetype');
+}
+
+body {
+    height: 729px;
+    margin: 0;
+    padding: 0;
+    background-color: #E2F5FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Home-Container {
+    width: 1000px;
+    height: 580px;
+    border-radius: 20px;
+    background: rgba(180, 219, 255, 0.40);
+    box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#Blog-Name {
+    font-family: 'HakgyoansimChilpanjijgae', sans-serif;
+    color: #0E0E0E;
+    font-size: 70px;
+    font-weight: 600;
+    margin: 0;
+}
+
+#Blog-Slogan {
+    color: #0E0E0E;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.Text-Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.Button-Container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Join-Button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Pretendard', sans-serif;
+    color: #8FC9FF;
+    font-size: 12px;
+    font-weight: 400;
+    width: 130px;
+    height: 40px;
+    border-radius: 40px;
+    border: 1px solid #8FC9FF;
+    background: rgba(255, 255, 255, 0.80);
+}
+
+a {
+    text-decoration: none;
+}
+
+.Input-Container {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#Input-Email,
+#Input-Password {
+    display: flex;
+    width: 255px;
+    height: 40px;
+    align-items: center;
+    border-radius: 6px;
+    border: 1px solid #FFF;
+    background: rgba(143, 201, 255, 0.80);
+    padding-left: 5px;
+    font-size: 12px;
+}
+
+#Input-Email::placeholder,
+#Input-Password::placeholder {
+    color: #EEE;
+    font-family: 'Pretendard';
+    font-weight: 400;
+    font-size: 12px;
+}
+
+#Input-Password:focus,
+#Input-Email:focus {
+    outline: none;
+    font-family: 'Pretendard';
+}
+
+.Image-Container {
+    display: flex;
+    color: #A3A2A2;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Pretendard';
+    font-size: 12px;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.Image-Container > i {
+    margin-top: 12px;
+}
