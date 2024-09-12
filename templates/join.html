@@ -19,9 +19,16 @@
             <input id="Input-Password" type="Password" placeholder="비밀번호를 입력해주세요"/>
         </section>
         <section class="Image-Container">
-            <i class="bi bi-folder2-open"></i>
-            <p>전문가 인증 이미지 추가</p>
+            <!-- 숨겨진 파일 입력 필드 -->
+            <input type="file" id="fileInput" style="display:none;" accept="image/*">
+        
+            <!-- 파일 선택을 트리거할 label -->
+            <label for="fileInput">
+                <i class="bi bi-folder2-open"></i>
+                <p>전문가 인증 이미지 추가</p>
+            </label>
         </section>
+        
         <section class="Button-Container"> 
             <input id="Join-Button" type="button" value="회원 가입"/>
         </section>
