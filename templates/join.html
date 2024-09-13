@@ -21,7 +21,7 @@
         <section class="Image-Container">
             <!-- 숨겨진 파일 입력 필드 -->
             <input type="file" id="fileInput" style="display:none;" accept="image/*">
-        
+            
             <!-- 파일 선택을 트리거할 label -->
             <label for="fileInput">
                 <i class="bi bi-folder2-open"></i>
@@ -32,6 +32,20 @@
         <section class="Button-Container"> 
             <input id="Join-Button" type="button" value="회원 가입"/>
         </section>
+        
+        <!-- 이미지 미리보기 컨테이너 -->
+        <div id="Preview-Container" style="display:none;">
+            <img id="Preview-Image" src="" alt="미리보기 이미지" />
+            <button id="Confirm-Button">확인</button>
+        </div>
+        
+        <!-- 체크 및 완료 메시지 -->
+        <div id="Completion-Container" style="display:none;">
+            <i class="bi bi-check-circle"></i>
+            <p>완료</p>
+        </div>
     </main>
+
+    <script src="{{ url_for('static', filename='js/join.js') }}"></script>
 </body>
 </html>

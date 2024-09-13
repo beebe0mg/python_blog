@@ -131,3 +131,48 @@ label {
 label > i {
     margin-top: 12px;
 }
+
+#Preview-Container {
+    background: hsl(201, 100%, 94%);
+    border-radius: 9px;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Preview-Image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+#Confirm-Button {
+    margin-top: 10px;
+    background-color: #8FC9FF;
+    color: white;
+    font-family: 'Pretendard';
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 10px;
+}
+
+#Completion-Container {
+    color: #8FC9FF;
+    display: flex;
+    align-items: center;
+    font-family: 'Pretendard';
+}
+
+#Completion-Container i {
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+#Completion-Container p {
+    font-size: 12px;
+}
