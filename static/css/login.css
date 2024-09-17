@@ -92,8 +92,7 @@ a {
 }
 
 #Input-Email,
-#Input-Password,
-#Input-Name {
+#Input-Password {
     display: flex;
     width: 255px;
     height: 40px;
@@ -106,8 +105,7 @@ a {
 }
 
 #Input-Email::placeholder,
-#Input-Password::placeholder,
-#Input-Name::placeholder {
+#Input-Password::placeholder {
     color: #EEE;
     font-family: 'Pretendard';
     font-weight: 400;
@@ -115,8 +113,7 @@ a {
 }
 
 #Input-Password:focus,
-#Input-Email:focus,
-#Input-Name:focus {
+#Input-Email:focus {
     outline: none;
     font-family: 'Pretendard';
 }
