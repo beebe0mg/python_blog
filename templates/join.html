@@ -1,4 +1,3 @@
-<!-- templates/home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,24 +13,35 @@
             <p id="Blog-Name">얼렁뚱땅 블로그</p>
             <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
         </section>
-        <section class="Input-Container">
-            <input id="Input-Name" type="Text" placeholder="사용자 이름을 입력해주세요"/>
-            <input id="Input-Email" type="Text" placeholder="이메일을 입력해주세요"/>
-            <input id="Input-Password" type="Password" placeholder="비밀번호를 입력해주세요"/>
-        </section>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p class="flash-message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('join') }}" enctype="multipart/form-data">
+            <section class="Input-Container">
+                <input id="Input-Name" type="Text" placeholder="사용자 이름을 입력해주세요" name="username"/>
+                <input id="Input-Email" type="Email" placeholder="이메일을 입력해주세요" name="email"/>
+                <input id="Input-Password" type="Password" placeholder="비밀번호를 입력해주세요" name="password" required />
+            </section>
+        
+            <section class="Button-Container"> 
+                <input id="Join-Button" type="submit" value="회원 가입"/>
+            </section>
+        </form>
+
         <section class="Image-Container">
-            <!-- 숨겨진 파일 입력 필드 -->
-            <input type="file" id="fileInput" style="display:none;" accept="image/*">
-            
-            <!-- 파일 선택을 트리거할 label -->
+            <input type="file" id="fileInput" name="profile_image" style="display:none;" accept="image/*">
             <label for="fileInput">
                 <i class="bi bi-folder2-open"></i>
                 <p>전문가 인증 이미지 추가</p>
             </label>
-        </section>
-        
-        <section class="Button-Container"> 
-            <input id="Join-Button" type="button" value="회원 가입"/>
         </section>
         
         <!-- 이미지 미리보기 컨테이너 -->

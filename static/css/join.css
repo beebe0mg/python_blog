@@ -21,6 +21,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Pretendard';
 }
 
 #Home-Container {
@@ -77,6 +78,8 @@ body {
     border-radius: 40px;
     border: 1px solid #8FC9FF;
     background: rgba(255, 255, 255, 0.80);
+    margin-bottom: 4px;
+    margin-top: 16px;
 }
 
 a {
@@ -127,7 +130,6 @@ label {
     gap: 8px;
     font-family: 'Pretendard';
     font-size: 12px;
-    margin: 4px;
     cursor: pointer;
 }
 
