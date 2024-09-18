@@ -181,3 +181,8 @@ label > i {
 #Completion-Container p {
     font-size: 12px;
 }
+
+.flash-message {
+    font-size: 14px;
+    color: #A3A2A2;
+}

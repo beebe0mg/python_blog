@@ -21,6 +21,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Pretendard';
 }
 
 #Home-Container {
@@ -116,4 +117,25 @@ a {
 #Input-Email:focus {
     outline: none;
     font-family: 'Pretendard';
+}
+
+.flash-messages {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: hsla(0, 0%, 100%, 0.9);
+    padding: 20px 20px;
+    border-radius: 10px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: rgba(143, 201, 255, 0.80);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease-out; /* 부드러운 애니메이션 효과 */
+    z-index: 1000; /* 메시지가 다른 요소 위에 표시되도록 함 */
+}
+
+.flash-message {
+    margin: 5px 0;
 }

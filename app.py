@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv()
 
@@ -64,8 +65,9 @@ def join():
         elif username_exists:
             flash("사용자 이름이 이미 존재합니다. 다른 사용자 이름을 사용해 주세요.")
         else:
-            # 사용자 데이터베이스에 저장
-            new_user = User(username=username, email=email, password=password)
+            # 비밀번호를 해시 처리하여 저장
+            hashed_password = generate_password_hash(password)
+            new_user = User(username=username, email=email, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
             
@@ -75,8 +77,23 @@ def join():
     
     return render_template('join.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        # 이메일이 데이터베이스에 있는지 확인
+        user = User.query.filter_by(email=email).first()
+        
+        # 유저가 존재하고 비밀번호가 일치하는지 확인
+        if user and check_password_hash(user.password, password):
+            flash("성공적으로 로그인되었습니다.", 'success')
+            return redirect(url_for('home'))  # 성공 시 홈 페이지로 리디렉션
+        else:
+            flash("이메일 또는 비밀번호가 올바르지 않습니다.", 'error')
+            return redirect(url_for('login'))  # 실패 시 로그인 페이지로 리디렉션
+    
     return render_template('login.html')
 
 @app.route('/users')

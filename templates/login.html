@@ -1,6 +1,6 @@
-<!-- templates/home.html -->
+<!-- templates/login.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +9,49 @@
 </head>
 <body>
     <main id="Home-Container">
-        <section class="Text-Container">
-            <p id="Blog-Name">얼렁뚱땅 블로그</p>
-            <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
-        </section>
-        <section class="Input-Container">
-            <input id="Input-Email" type="Text" placeholder="이메일을 입력해주세요"/>
-            <input id="Input-Password" type="Password" placeholder="비밀번호를 입력해주세요"/>
-        </section>
-        <section class="Button-Container"> 
-            <input id="Login-Button" type="button" value="로그인"/>
-        </section>
+        <form method="POST" action="{{ url_for('login') }}">
+            <section class="Text-Container">
+                <p id="Blog-Name">얼렁뚱땅 블로그</p>
+                <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
+            </section>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <p class="flash-message">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <section class="Input-Container">
+                <input id="Input-Email" name="email" type="text" placeholder="이메일을 입력해주세요" required/>
+                <input id="Input-Password" name="password" type="password" placeholder="비밀번호를 입력해주세요" required/>
+            </section>
+            <section class="Button-Container"> 
+                <input id="Login-Button" type="submit" value="로그인"/>
+            </section>
+        </form>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // flash 메시지 요소 선택
+            const flashMessages = document.querySelector('.flash-messages');
+            
+            // flash 메시지가 있으면 3초 후에 사라지게 설정
+            if (flashMessages) {
+                setTimeout(() => {
+                    flashMessages.style.opacity = 0;
+                    // 0.5초 후에 요소를 완전히 숨기도록 설정
+                    setTimeout(() => {
+                        flashMessages.style.display = 'none';
+                    }, 500);
+                }, 2000);
+            }
+        });
+    </script>
+        
 </body>
 </html>
