@@ -34,6 +34,10 @@ def home():
 def start():
     return render_template('start.html')
 
+@app.route('/write')
+def write():
+    return render_template('write.html')
+
 @app.route('/join', methods=['GET', 'POST'])
 def join():
     if request.method == 'POST':
@@ -71,7 +75,7 @@ def join():
             db.session.add(new_user)
             db.session.commit()
             
-            return redirect(url_for('home'))
+            return redirect(url_for('write'))
         
         return redirect(url_for('join'))
     
@@ -89,7 +93,7 @@ def login():
         # 유저가 존재하고 비밀번호가 일치하는지 확인
         if user and check_password_hash(user.password, password):
             flash("성공적으로 로그인되었습니다.", 'success')
-            return redirect(url_for('home'))  # 성공 시 홈 페이지로 리디렉션
+            return redirect(url_for('write'))  # 성공 시 홈 페이지로 리디렉션
         else:
             flash("이메일 또는 비밀번호가 올바르지 않습니다.", 'error')
             return redirect(url_for('login'))  # 실패 시 로그인 페이지로 리디렉션
