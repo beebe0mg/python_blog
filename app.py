@@ -38,6 +38,10 @@ def start():
 def write():
     return render_template('write.html')
 
+@app.route('/main')
+def main():
+    return render_template('main.html')
+
 @app.route('/join', methods=['GET', 'POST'])
 def join():
     if request.method == 'POST':
