@@ -1,10 +1,11 @@
-<!-- templates/home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>얼렁뚱땅 블로그</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
@@ -13,6 +14,72 @@
             <p id="Blog-Name">얼렁뚱땅 블로그</p>
             <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
         </section>
+        
+        <!-- 버튼들 -->
+        <section class="Circle-Container">
+            <button id="OneCircle" type="button">
+                <i class="bi bi-images"></i>
+            </button>
+            <button id="TwoCircle" type="button">
+                <i class="bi bi-palette"></i>
+            </button>
+            
+            <!-- 모달 시작 -->
+            <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="colorModalLabel">글자 색 선택</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="color" id="colorPicker" value="#000000">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="applyColor">적용</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 모달 끝 -->
+            
+            <button id="ThreeCircle" type="button">
+                <i class="bi bi-tags"></i>
+            </button>
+            <button id="FourCircle" type="button">
+                <i class="bi bi-diagram-3"></i>
+            </button>
+        </section>
+
+        <!-- 텍스트 입력 공간 -->
+        <section class="SmallContent">
+            <textarea id="SmallContent1" placeholder="내용을 입력하세요." rows="4"></textarea>
+        </section>
     </main>
+
+    <!-- Bootstrap JS 및 Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    
+    <!-- JavaScript 코드 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // TwoCircle 클릭 시 모달 열기
+            document.getElementById('TwoCircle').addEventListener('click', function() {
+                var colorModal = new bootstrap.Modal(document.getElementById('colorModal'));
+                colorModal.show();
+            });
+
+            // 적용 버튼 클릭 시 텍스트 색상 변경
+            document.getElementById('applyColor').addEventListener('click', function() {
+                const selectedColor = document.getElementById('colorPicker').value;
+                document.getElementById('SmallContent1').style.color = selectedColor;
+                
+                // 모달 닫기
+                var colorModal = bootstrap.Modal.getInstance(document.getElementById('colorModal'));
+                colorModal.hide();
+            });
+        });
+    </script>
 </body>
 </html>
