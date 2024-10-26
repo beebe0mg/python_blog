@@ -31,10 +31,8 @@ body {
     box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.10);
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     margin-top: 110px;
     position: relative;
-    /* overflow: hidden; */
 }
 
 #Blog-Name {
@@ -96,4 +94,92 @@ body {
     color: #0E0E0E;
     outline: none; /* 포커스 시 외곽선 제거 */
     border: none;
+}
+
+#OneCircle:hover > i,
+#TwoCircle:hover > i,
+#ThreeCircle:hover > i,
+#FourCircle:hover > i {
+    color: #5357c3;
+}
+
+#Hashtag-Container {
+    font-family: 'Pretendard';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1;
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    padding: 20px;
+}
+
+#hashtagInput {
+    width: 300px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #B4DBFF66;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+#hashtagInput::placeholder {
+    font-size: 12px;
+}
+
+#confirmHashtags {
+    font-size: 12px;
+    width: 100px;
+    background-color: #8aa4f3;
+    border: #8aa4f3;
+}
+
+span {
+    font-size: 12px;
+}
+
+#ImagePreview {
+    position: absolute; /* 이미지를 텍스트 입력 영역 위에 배치 */
+    top: 10px; /* 텍스트 입력 영역 위쪽으로 더 가까이 위치 */
+    left: 10px; /* 왼쪽으로 더 가까이 붙이기 */
+    z-index: 2; /* 이미지 미리보기 영역을 텍스트 입력 영역 위에 위치시키기 */
+}
+
+#hashtagList {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+
+#hashtagList span {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 2px;
+}
+
+.SmallContent textarea {
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem; /* 원래 테두리 스타일 */
+    padding: 10px;
+    resize: none; /* 크기 조정 불가 */
+}
+
+.ImagePreview {
+    display: flex;
+    flex-direction: column; /* 세로로 쌓기 */
+    margin-top: 10px;
+}
+
+.ImagePreview img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px; /* 이미지 간격 */
 }

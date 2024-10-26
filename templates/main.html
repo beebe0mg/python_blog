@@ -15,34 +15,16 @@
             <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
         </section>
         
-        <!-- 버튼들 -->
         <section class="Circle-Container">
-            <button id="OneCircle" type="button">
-                <i class="bi bi-images"></i>
-            </button>
+            <input type="file" id="fileInput" name="profile_image" style="display:none;" accept="image/*">
+            <label for="fileInput">
+                <button id="OneCircle" type="button">
+                    <i class="bi bi-images"></i>
+                </button>
+            </label>
             <button id="TwoCircle" type="button">
                 <i class="bi bi-palette"></i>
             </button>
-            
-            <!-- 모달 시작 -->
-            <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="colorModalLabel">글자 색 선택</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="color" id="colorPicker" value="#000000">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="applyColor">적용</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- 모달 끝 -->
-            
             <button id="ThreeCircle" type="button">
                 <i class="bi bi-tags"></i>
             </button>
@@ -51,33 +33,107 @@
             </button>
         </section>
 
-        <!-- 텍스트 입력 공간 -->
         <section class="SmallContent">
             <textarea id="SmallContent1" placeholder="내용을 입력하세요." rows="4"></textarea>
         </section>
+
+        <!-- 이미지 미리보기 섹션 추가 -->
+        <section class="ImagePreview" id="ImagePreview">
+            <!-- 업로드된 이미지는 여기에서 표시됩니다 -->
+        </section>
+
+        <section id="Hashtag-Container">
+            <input type="text" id="hashtagInput" placeholder="한 가지 이상의 해시태그를 입력해 주세요." class="form-control" style="display: none;">
+            <button id="confirmHashtags" class="btn btn-primary mt-2" style="display: none;">확인</button>
+            <div id="hashtagList" class="mt-2"></div>
+        </section>        
     </main>
 
-    <!-- Bootstrap JS 및 Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     
-    <!-- JavaScript 코드 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // TwoCircle 클릭 시 모달 열기
-            document.getElementById('TwoCircle').addEventListener('click', function() {
-                var colorModal = new bootstrap.Modal(document.getElementById('colorModal'));
-                colorModal.show();
+            const imagePreview = document.getElementById('ImagePreview');
+            
+            // OneCircle 버튼 클릭 시 파일 선택 창 열기
+            document.getElementById('OneCircle').addEventListener('click', function() {
+                document.getElementById('fileInput').click();
             });
 
-            // 적용 버튼 클릭 시 텍스트 색상 변경
-            document.getElementById('applyColor').addEventListener('click', function() {
-                const selectedColor = document.getElementById('colorPicker').value;
-                document.getElementById('SmallContent1').style.color = selectedColor;
-                
-                // 모달 닫기
-                var colorModal = bootstrap.Modal.getInstance(document.getElementById('colorModal'));
-                colorModal.hide();
+            // 해시태그 리스트를 저장할 배열
+            const hashtags = [];
+
+            // ThreeCircle 버튼 클릭 시 해시태그 입력 컨테이너 표시
+            document.getElementById('ThreeCircle').addEventListener('click', function() {
+                const hashtagInput = document.getElementById('hashtagInput');
+                const confirmButton = document.getElementById('confirmHashtags');
+                const hashtagContainer = document.getElementById('Hashtag-Container');
+                const hashtagList = document.getElementById('hashtagList');
+
+                // 해시태그 입력창과 버튼을 보이게 함
+                hashtagInput.style.display = 'block';
+                confirmButton.style.display = 'block';
+                hashtagContainer.style.display = 'flex'; // 컨테이너를 보이게 설정
+
+                // 기존 해시태그를 리스트에 표시
+                hashtagList.innerHTML = ''; // 리스트 초기화
+                hashtags.forEach(hashtag => {
+                    const newHashtag = document.createElement('span');
+                    newHashtag.textContent = `#${hashtag}`;
+                    hashtagList.appendChild(newHashtag);
+                });
+            });
+
+            // 해시태그 확인 버튼 클릭 시 처리
+            document.getElementById('confirmHashtags').addEventListener('click', function() {
+                const hashtagInput = document.getElementById('hashtagInput');
+                const hashtagList = document.getElementById('hashtagList');
+
+                // 입력된 해시태그가 비어있지 않은 경우
+                if (hashtagInput.value) {
+                    // 해시태그 추가
+                    hashtags.push(hashtagInput.value); // 해시태그 배열에 추가
+                    const newHashtag = document.createElement('span');
+                    newHashtag.textContent = `#${hashtagInput.value}`;
+                    hashtagList.appendChild(newHashtag);
+
+                    // 입력창 초기화
+                    hashtagInput.value = '';
+                } else {
+                    // 입력이 비어있다면 해시태그 입력창과 버튼, 기존 해시태그 숨기기
+                    hashtagInput.style.display = 'none';
+                    document.getElementById('confirmHashtags').style.display = 'none';
+                    hashtagList.innerHTML = ''; // 기존 해시태그 리스트 비우기
+                    document.getElementById('Hashtag-Container').style.display = 'none'; // 해시태그 컨테이너 숨기기
+                }
+            });
+
+            // 파일 선택 및 업로드 처리
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+                const files = event.target.files;
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    // 이미지 업로드
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 업로드된 이미지의 img 요소 생성
+                        const img = document.createElement('img');
+                        img.src = `/uploads/${data.filename}`; // 백엔드에서 이미지를 제공하는 경로
+                        img.alt = 'Uploaded Image';
+                        img.classList.add('uploaded-image'); // 스타일링을 위한 클래스 추가
+                        imagePreview.appendChild(img);
+                    })
+                    .catch(error => console.error('Error uploading image:', error));
+                }
             });
         });
     </script>
