@@ -9,6 +9,45 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
+    <div class="modal fade" id="hashtagModal" tabindex="-1" aria-labelledby="hashtagModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hashtagModalLabel">해시태그 추가</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="modalHashtagInput" class="form-control" placeholder="해시태그를 입력하세요">
+                    <div id="modalHashtagList" class="mt-2"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" id="modalConfirmHashtag" class="btn btn-primary">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 색상 변경 모달 추가 -->
+    <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="colorModalLabel">글자 색상 변경</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="colorPicker">색상을 선택하세요:</label>
+                    <input type="color" id="colorPicker" value="#000000" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" id="changeColorButton" class="btn btn-primary">변경</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main id="Home-Container">
         <section class="Text-Container">
             <p id="Blog-Name">얼렁뚱땅 블로그</p>
@@ -135,7 +174,23 @@
                     .catch(error => console.error('Error uploading image:', error));
                 }
             });
+
+            // TwoCircle 버튼 클릭 시 색상 변경 모달 열기
+            document.getElementById('TwoCircle').addEventListener('click', function() {
+                const colorModal = new bootstrap.Modal(document.getElementById('colorModal'));
+                colorModal.show();
+            });
+
+            // 색상 변경 처리
+            document.getElementById('changeColorButton').addEventListener('click', function() {
+                const selectedColor = document.getElementById('colorPicker').value;
+                document.getElementById('SmallContent1').style.color = selectedColor; // 텍스트 색상 변경
+                bootstrap.Modal.getInstance(document.getElementById('colorModal')).hide(); // 모달 닫기
+            });
         });
+
+        
+        
     </script>
 </body>
 </html>
