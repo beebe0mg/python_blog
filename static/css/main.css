@@ -30,7 +30,7 @@ body {
     background: rgba(180, 219, 255, 0.40);
     display: flex;
     flex-direction: column;
-    margin-top: -200px;
+    margin-top: -232px;
     position: relative;
 }
 
@@ -184,4 +184,16 @@ span {
     top: 10px; /* 텍스트 입력 영역 위쪽으로 더 가까이 위치 */
     left: 10px; /* 왼쪽으로 더 가까이 붙이기 */
     z-index: 2; /* 이미지 미리보기 영역을 텍스트 입력 영역 위에 위치시키기 */
+}
+
+.Post-Button-Container {
+    display: flex;
+    justify-content: center;
+    font-family: 'Pretendard';
+    font-size: 10px;
+}
+
+#postButton {
+    background-color: #8aa4f3;
+    border: none;
 }

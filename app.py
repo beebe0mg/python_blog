@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
@@ -31,6 +31,7 @@ class User(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # 포스트 ID
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 작성자 ID
     image_filename = db.Column(db.String(200))  # 이미지 파일명
     hashtags = db.Column(db.String(500))  # 해시태그
 
@@ -111,6 +112,7 @@ def login():
 
         # 로그인 체크
         if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id  # 세션에 사용자 ID 저장
             flash("성공적으로 로그인되었습니다.", 'success')
             return redirect(url_for('write'))
         else:
@@ -141,11 +143,6 @@ def upload_image():
     img = img.resize((300, 300))  # 크기 조정
     img.save(filepath)  # 수정된 이미지 저장
 
-    # DB에 이미지 파일명 저장
-    new_post = Post(image_filename=filename)  # 새로운 포스트 생성
-    db.session.add(new_post)  # 세션에 추가
-    db.session.commit()  # 커밋
-
     return jsonify({'filename': filename})  # JSON 응답
 
 # 해시태그 추가 엔드포인트
@@ -163,10 +160,51 @@ def add_hashtag():
             return jsonify({'message': '해시태그가 성공적으로 추가되었습니다.'})  # 성공 메시지
     return jsonify({'error': '해시태그가 비어 있습니다.'}), 400  # 오류 메시지
 
+# 포스트 작성 엔드포인트
+# 포스트 작성 엔드포인트
+@app.route('/post', methods=['POST'])
+def create_post():
+    if 'user_id' not in session:
+        return jsonify({'error': '로그인하지 않았습니다.'}), 401  # 로그인하지 않은 경우
+
+    content = request.json.get('content')
+    hashtags = request.json.get('hashtags')  # 해시태그 받아오기
+    images = request.json.get('images')  # 이미지 URL 배열 받아오기
+
+    # 포스트 데이터가 유효한지 확인
+    if content and images:  # image_filename을 images로 변경
+        user_id = session['user_id']  # 세션에서 사용자 ID 가져오기
+        new_post = Post(user_id=user_id, hashtags=hashtags, image_filename=', '.join(images))  # 이미지 URL들을 문자열로 변환
+        db.session.add(new_post)
+        db.session.commit()
+        return jsonify({'message': '포스트가 성공적으로 작성되었습니다.'})  # 성공 메시지
+    return jsonify({'error': '내용이나 이미지가 비어 있습니다.'}), 400  # 오류 메시지
+
 # 업로드된 이미지 확인 엔드포인트
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  # 이미지 파일 전송
+
+# 포스트 보기 페이지 라우트
+@app.route('/posts')
+def view_posts():
+    all_posts = Post.query.all()  # 모든 포스트 가져오기
+    return render_template('posts.html', posts=all_posts)  # posts.html 템플릿 렌더링
+
+# 애플리케이션 실행
+if __name__ == '__main__':
+    app.run(debug=True)  # 디버그 모드로 실행
+
+
+# 업로드된 이미지 확인 엔드포인트
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  # 이미지 파일 전송
+
+@app.route('/posts')
+def view_posts():
+    all_posts = Post.query.all()  # 모든 포스트 가져오기
+    return render_template('posts.html', posts=all_posts)  # posts.html 템플릿 렌더링
 
 # 애플리케이션 실행
 if __name__ == '__main__':
