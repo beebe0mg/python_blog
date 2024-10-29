@@ -161,7 +161,6 @@ def add_hashtag():
     return jsonify({'error': '해시태그가 비어 있습니다.'}), 400  # 오류 메시지
 
 # 포스트 작성 엔드포인트
-# 포스트 작성 엔드포인트
 @app.route('/post', methods=['POST'])
 def create_post():
     if 'user_id' not in session:

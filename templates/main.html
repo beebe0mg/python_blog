@@ -204,106 +204,95 @@
                     document.addEventListener('DOMContentLoaded', function() {
                         const imagePreview = document.getElementById('ImagePreview');
                         const hashtags = [];
-            
+                
                         // OneCircle 버튼 클릭 시 파일 선택 창 열기
                         document.getElementById('OneCircle').addEventListener('click', function() {
                             document.getElementById('fileInput').click();
                         });
-            
+                
                         // ThreeCircle 버튼 클릭 시 해시태그 입력 컨테이너 표시
                         document.getElementById('ThreeCircle').addEventListener('click', function() {
                             const hashtagInput = document.getElementById('hashtagInput');
                             const confirmButton = document.getElementById('confirmHashtags');
                             const hashtagContainer = document.getElementById('Hashtag-Container');
                             const hashtagList = document.getElementById('hashtagList');
-            
-                            // 해시태그 입력창과 버튼을 보이게 함
+                
                             hashtagInput.style.display = 'block';
                             confirmButton.style.display = 'block';
-                            hashtagContainer.style.display = 'flex'; // 컨테이너를 보이게 설정
-            
-                            // 기존 해시태그를 리스트에 표시
-                            hashtagList.innerHTML = ''; // 리스트 초기화
+                            hashtagContainer.style.display = 'flex';
+                
+                            hashtagList.innerHTML = '';
                             hashtags.forEach(hashtag => {
                                 const newHashtag = document.createElement('span');
                                 newHashtag.textContent = `#${hashtag}`;
                                 hashtagList.appendChild(newHashtag);
                             });
                         });
-            
+                
                         // 해시태그 확인 버튼 클릭 시 처리
                         document.getElementById('confirmHashtags').addEventListener('click', function() {
                             const hashtagInput = document.getElementById('hashtagInput');
                             const hashtagList = document.getElementById('hashtagList');
-            
-                            // 입력된 해시태그가 비어있지 않은 경우
+                
                             if (hashtagInput.value) {
-                                // 해시태그 추가
-                                hashtags.push(hashtagInput.value); // 해시태그 배열에 추가
+                                hashtags.push(hashtagInput.value);
                                 const newHashtag = document.createElement('span');
                                 newHashtag.textContent = `#${hashtagInput.value}`;
                                 hashtagList.appendChild(newHashtag);
-            
-                                // 입력창 초기화
                                 hashtagInput.value = '';
                             } else {
-                                // 입력이 비어있다면 해시태그 입력창과 버튼, 기존 해시태그 숨기기
                                 hashtagInput.style.display = 'none';
                                 document.getElementById('confirmHashtags').style.display = 'none';
-                                hashtagList.innerHTML = ''; // 기존 해시태그 리스트 비우기
-                                document.getElementById('Hashtag-Container').style.display = 'none'; // 해시태그 컨테이너 숨기기
+                                hashtagList.innerHTML = '';
+                                document.getElementById('Hashtag-Container').style.display = 'none';
                             }
                         });
-            
+                
                         // 파일 선택 및 업로드 처리
                         document.getElementById('fileInput').addEventListener('change', function(event) {
                             const files = event.target.files;
-            
                             for (let i = 0; i < files.length; i++) {
                                 const file = files[i];
                                 const formData = new FormData();
                                 formData.append('file', file);
-            
-                                // 이미지 업로드
+                
                                 fetch('/upload', {
                                     method: 'POST',
                                     body: formData
                                 })
                                 .then(response => response.json())
                                 .then(data => {
-                                    // 업로드된 이미지의 img 요소 생성
                                     const img = document.createElement('img');
-                                    img.src = `/uploads/${data.filename}`; // 백엔드에서 이미지를 제공하는 경로
+                                    img.src = `/uploads/${data.filename}`;
                                     img.alt = 'Uploaded Image';
-                                    img.classList.add('uploaded-image'); // 스타일링을 위한 클래스 추가
+                                    img.classList.add('uploaded-image');
                                     imagePreview.appendChild(img);
                                 })
                                 .catch(error => console.error('Error uploading image:', error));
                             }
                         });
-            
+                
                         // TwoCircle 버튼 클릭 시 색상 변경 모달 열기
                         document.getElementById('TwoCircle').addEventListener('click', function() {
                             const colorModal = new bootstrap.Modal(document.getElementById('colorModal'));
                             colorModal.show();
                         });
-            
+                
                         // 색상 변경 처리
                         document.getElementById('changeColorButton').addEventListener('click', function() {
                             const selectedColor = document.getElementById('colorPicker').value;
                             const smallContent = document.getElementById('SmallContent1');
-                            smallContent.style.color = selectedColor; // 텍스트 색상 변경
+                            smallContent.style.color = selectedColor;
                             const colorModal = bootstrap.Modal.getInstance(document.getElementById('colorModal'));
                             colorModal.hide();
                         });
-            
+                
                         // 게시하기 버튼 클릭 시 데이터 전송
                         document.getElementById('postButton').addEventListener('click', function() {
                             const smallContent = document.getElementById('SmallContent1').value;
-                            const hashtagsString = hashtags.join(', '); // 해시태그를 문자열로 변환
-                            const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src); // 이미지 URL 배열
-            
-                            // 서버로 데이터 전송
+                            const hashtagsString = hashtags.join(', ');
+                            const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src);
+                
                             fetch('/post', {
                                 method: 'POST',
                                 headers: {
@@ -317,45 +306,17 @@
                             })
                             .then(response => response.json())
                             .then(data => {
-                                // 성공 메시지 출력 또는 페이지 리다이렉션
-                                alert('게시물이 성공적으로 작성되었습니다.');
-                                location.reload(); // 페이지 리프레시
-                            })
-                            .catch(error => console.error('Error posting:', error));
-                        });
-
-                        // 게시하기 버튼 클릭 시 데이터 전송
-                        document.getElementById('postButton').addEventListener('click', function() {
-                            const smallContent = document.getElementById('SmallContent1').value; // 텍스트 내용 수집
-                            const hashtagsString = hashtags.join(', '); // 해시태그 배열을 문자열로 변환
-                            const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src); // 이미지 URL 배열 생성
-
-                            // 서버로 데이터 전송
-                            fetch('/post', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    content: smallContent, // 입력한 내용
-                                    hashtags: hashtagsString, // 해시태그
-                                    images: images // 이미지 URL
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(data => {
                                 if (data.error) {
-                                    alert(data.error); // 오류 메시지 출력
+                                    alert(data.error);
                                 } else {
-                                    alert('게시물이 성공적으로 작성되었습니다.');
                                     location.reload(); // 페이지 리프레시
                                 }
                             })
-                            .catch(error => console.error('Error posting:', error)); // 에러 처리
+                            .catch(error => console.error('Error posting:', error));
                         });
-
                     });
                 </script>
+                
             </body>
             </html>
             
