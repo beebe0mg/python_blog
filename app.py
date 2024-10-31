@@ -63,6 +63,10 @@ def write():
 def main():
     return render_template('main.html')  # 메인 템플릿 렌더링
 
+@app.route('/bloghome')
+def bloghome():
+    return render_template('bloghome.html')
+
 # 회원가입 페이지 및 처리 라우트
 @app.route('/join', methods=['GET', 'POST'])
 def join():

@@ -172,9 +172,11 @@
                         <button id="ThreeCircle" type="button">
                             <i class="bi bi-tags"></i>
                         </button>
-                        <button id="FourCircle" type="button">
-                            <i class="bi bi-diagram-3"></i>
-                        </button>
+                        <a href="{{ url_for('bloghome') }}">
+                            <button id="FourCircle" type="button">
+                                <i class="bi bi-diagram-3"></i>
+                            </button>
+                        </a>
                     </section>
             
                     <!-- 이미지 미리보기 섹션 추가 -->
@@ -314,6 +316,10 @@
                             })
                             .catch(error => console.error('Error posting:', error));
                         });
+                    });
+                    
+                    document.getElementById('FourCircle').addEventListener('click', function() {
+                        window.location.href = '/bloghome';
                     });
                 </script>
                 
