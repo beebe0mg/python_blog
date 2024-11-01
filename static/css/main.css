@@ -86,7 +86,7 @@ body {
     resize: none;
     padding: 30px; /* 텍스트 입력 영역의 여백 */
     font-family: 'HakgyoansimBadasseugi';
-    margin-top: -180px;
+    margin-top: -100px;
     font-size: 18px;
     color: #0E0E0E;
     outline: none; /* 포커스 시 외곽선 제거 */

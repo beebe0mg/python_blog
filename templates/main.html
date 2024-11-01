@@ -67,9 +67,6 @@
             <button id="ThreeCircle" type="button">
                 <i class="bi bi-tags"></i>
             </button>
-            <button id="FourCircle" type="button">
-                <i class="bi bi-diagram-3"></i>
-            </button>
         </section>
 
         <!-- 이미지 미리보기 섹션 추가 -->
@@ -82,7 +79,9 @@
         </section>
 
         <section class="Post-Button-Container text-center mt-3">
-            <button id="postButton" class="btn btn-success">게시하기</button>
+            <a href="{{ url_for('bloghome') }}">
+                <button id="postButton" class="btn btn-success">게시하기</button>
+            </a>
         </section>
 
         <section id="Hashtag-Container">
@@ -96,113 +95,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imagePreview = document.getElementById('ImagePreview');
-            
-            // OneCircle 버튼 클릭 시 파일 선택 창 열기
-            document.getElementById('OneCircle').addEventListener('click', function() {
-                document.getElementById('fileInput').click();
-            });
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>얼렁뚱땅 블로그</title>
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
-                <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-            </head>
-            <body>
-                <div class="modal fade" id="hashtagModal" tabindex="-1" aria-labelledby="hashtagModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="hashtagModalLabel">해시태그 추가</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="text" id="modalHashtagInput" class="form-control" placeholder="해시태그를 입력하세요">
-                                <div id="modalHashtagList" class="mt-2"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                <button type="button" id="modalConfirmHashtag" class="btn btn-primary">확인</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <!-- 색상 변경 모달 추가 -->
-                <div class="modal fade" id="colorModal" tabindex="-1" aria-labelledby="colorModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="colorModalLabel">글자 색상 변경</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <label for="colorPicker">색상을 선택하세요:</label>
-                                <input type="color" id="colorPicker" value="#000000" class="form-control">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                                <button type="button" id="changeColorButton" class="btn btn-primary">변경</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-                <main id="Home-Container">
-                    <section class="Text-Container">
-                        <p id="Blog-Name">얼렁뚱땅 블로그</p>
-                        <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
-                    </section>
-                    
-                    <section class="Circle-Container">
-                        <input type="file" id="fileInput" name="profile_image" style="display:none;" accept="image/*" multiple>
-                        <label for="fileInput">
-                            <button id="OneCircle" type="button">
-                                <i class="bi bi-images"></i>
-                            </button>
-                        </label>
-                        <button id="TwoCircle" type="button">
-                            <i class="bi bi-palette"></i>
-                        </button>
-                        <button id="ThreeCircle" type="button">
-                            <i class="bi bi-tags"></i>
-                        </button>
-                        <a href="{{ url_for('bloghome') }}">
-                            <button id="FourCircle" type="button">
-                                <i class="bi bi-diagram-3"></i>
-                            </button>
-                        </a>
-                    </section>
-            
-                    <!-- 이미지 미리보기 섹션 추가 -->
-                    <section class="ImagePreview" id="ImagePreview">
-                        <!-- 업로드된 이미지는 여기에서 표시됩니다 -->
-                    </section>
-            
-                    <section class="SmallContent">
-                        <textarea id="SmallContent1" placeholder="내용을 입력하세요." rows="4"></textarea>
-                    </section>
-            
-                    <section id="Hashtag-Container">
-                        <input type="text" id="hashtagInput" placeholder="한 가지 이상의 해시태그를 입력해 주세요." class="form-control" style="display: none;">
-                        <button id="confirmHashtags" class="btn btn-primary mt-2" style="display: none;">확인</button>
-                        <div id="hashtagList" class="mt-2"></div>
-                    </section>   
-            
-                    <section class="Post-Button-Container text-center mt-3">
-                        <button id="postButton" class="btn btn-success">게시하기</button>
-                    </section>        
-                </main>
-            
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-                
-                <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         const imagePreview = document.getElementById('ImagePreview');
                         const hashtags = [];
@@ -316,10 +208,6 @@
                             })
                             .catch(error => console.error('Error posting:', error));
                         });
-                    });
-                    
-                    document.getElementById('FourCircle').addEventListener('click', function() {
-                        window.location.href = '/bloghome';
                     });
                 </script>
                 

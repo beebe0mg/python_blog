@@ -135,9 +135,6 @@ def users():
 @app.route('/upload', methods=['POST'])
 def upload_image():
     file = request.files.get('file')
-    if not file or not allowed_file(file.filename):
-        return jsonify({'error': '올바른 파일을 선택해 주세요.'}), 400
-
     filename = secure_filename(file.filename)  # 파일 이름 안전하게 만들기
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)  # 파일 경로
     file.save(filepath)  # 파일 저장
