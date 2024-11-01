@@ -8,7 +8,13 @@
     <h1>게시물 목록</h1>
     <ul>
         {% for post in posts %}
-            <li>ID: {{ post.id }}, 사용자 ID: {{ post.user_id }}, 해시태그: {{ post.hashtags }}, 이미지: {{ post.image_filename }}</li>
+            <li>
+                ID: {{ post.id }}, 
+                사용자 ID: {{ post.user_id }}, 
+                내용: {{ post.content }},
+                해시태그: {{ post.hashtags }}, 
+                이미지: {{ post.image_filename }}
+            </li>
         {% endfor %}
     </ul>
 </body>

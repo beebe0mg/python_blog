@@ -29,14 +29,17 @@ class User(db.Model):
     email = db.Column(db.String(150), nullable=False, unique=True)  # 이메일
     password = db.Column(db.String(150), nullable=False)  # 비밀번호
 
+# 데이터베이스 모델 정의
 class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # 포스트 ID
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 작성자 ID
-    image_filename = db.Column(db.String(200))  # 이미지 파일명
-    hashtags = db.Column(db.String(500))  # 해시태그
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)  # 이 줄이 추가되었는지 확인
+    image_filename = db.Column(db.String(200))
+    hashtags = db.Column(db.String(500))
 
 # 데이터베이스 테이블 생성
 with app.app_context():
+    db.drop_all()  # 주의: 이 줄은 기존 데이터를 모두 삭제합니다
     db.create_all()
 
 # 파일 확장자 검사 함수
@@ -164,21 +167,26 @@ def add_hashtag():
 # 포스트 작성 엔드포인트
 @app.route('/post', methods=['POST'])
 def create_post():
-    if 'user_id' not in session:
-        return jsonify({'error': '로그인하지 않았습니다.'}), 401  # 로그인하지 않은 경우
+    try:
+        if 'user_id' not in session:
+            return jsonify({'error': '로그인하지 않았습니다.'}), 401
 
-    content = request.json.get('content')
-    hashtags = request.json.get('hashtags')  # 해시태그 받아오기
-    images = request.json.get('images')  # 이미지 URL 배열 받아오기
+        content = request.json.get('content')
+        hashtags = request.json.get('hashtags')
+        images = request.json.get('images')
 
-    # 포스트 데이터가 유효한지 확인
-    if content and images:  # image_filename을 images로 변경
-        user_id = session['user_id']  # 세션에서 사용자 ID 가져오기
-        new_post = Post(user_id=user_id, hashtags=hashtags, image_filename=', '.join(images))  # 이미지 URL들을 문자열로 변환
+        if not content or not images:
+            return jsonify({'error': '내용이나 이미지가 비어 있습니다.'}), 400
+
+        user_id = session['user_id']
+        new_post = Post(user_id=user_id, content=content, hashtags=hashtags, image_filename=', '.join(images))
         db.session.add(new_post)
         db.session.commit()
-        return jsonify({'message': '포스트가 성공적으로 작성되었습니다.'})  # 성공 메시지
-    return jsonify({'error': '내용이나 이미지가 비어 있습니다.'}), 400  # 오류 메시지
+        return jsonify({'message': '포스트가 성공적으로 작성되었습니다.', 'redirect': url_for('bloghome')})
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f'포스트 작성 중 오류 발생: {str(e)}')
+        return jsonify({'error': f'포스트 작성 중 오류 발생: {str(e)}'}), 500
 
 # 업로드된 이미지 확인 엔드포인트
 @app.route('/uploads/<filename>')

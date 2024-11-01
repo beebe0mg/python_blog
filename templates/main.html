@@ -185,12 +185,12 @@
                         document.getElementById('postButton').addEventListener('click', function() {
                             const smallContent = document.getElementById('SmallContent1').value;
                             const hashtagsString = hashtags.join(', ');
-                            const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src);
-                
+                            const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src.split('/').pop());
+                        
                             fetch('/post', {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json'
+                                    'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
                                     content: smallContent,
@@ -198,17 +198,24 @@
                                     images: images
                                 })
                             })
-                            .then(response => response.json())
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('서버 응답이 올바르지 않습니다.');
+                                }
+                                return response.json();
+                            })
                             .then(data => {
-                                if (data.error) {
-                                    alert(data.error);
+                                if (data.redirect) {
+                                    window.location.href = data.redirect;
                                 } else {
-                                    location.reload(); // 페이지 리프레시
+                                    console.error(data.error);
                                 }
                             })
-                            .catch(error => console.error('Error posting:', error));
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
                         });
-                    });
+                });
                 </script>
                 
             </body>
