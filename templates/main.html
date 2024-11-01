@@ -182,10 +182,17 @@
                         });
                 
                         // 게시하기 버튼 클릭 시 데이터 전송
-                        document.getElementById('postButton').addEventListener('click', function() {
+                        document.getElementById('postButton').addEventListener('click', function(event) {
+                            event.preventDefault(); // 기본 동작 방지
+                        
                             const smallContent = document.getElementById('SmallContent1').value;
                             const hashtagsString = hashtags.join(', ');
                             const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src.split('/').pop());
+                        
+                            if (!smallContent || images.length === 0) {
+                                alert('내용과 이미지를 모두 입력해주세요.');
+                                return; // 함수 실행 중단
+                            }
                         
                             fetch('/post', {
                                 method: 'POST',
@@ -207,12 +214,16 @@
                             .then(data => {
                                 if (data.redirect) {
                                     window.location.href = data.redirect;
+                                } else if (data.error) {
+                                    alert(data.error);
                                 } else {
-                                    console.error(data.error);
+                                    alert('포스트가 성공적으로 작성되었습니다.');
+                                    window.location.href = '/bloghome';
                                 }
                             })
                             .catch(error => {
                                 console.error('Error:', error);
+                                alert('포스트 작성 중 오류가 발생했습니다: ' + error.message);
                             });
                         });
                 });
