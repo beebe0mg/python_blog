@@ -15,6 +15,12 @@ app.secret_key = os.getenv('SECRET_KEY', 'default_secret_key')  # 시크릿 키 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # 현재 파일 경로
 app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'uploads')  # 업로드 폴더 경로
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 데이터베이스 URI
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'uploads')
+
+# 업로드 폴더가 없으면 생성
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 # SQLAlchemy 객체 생성
 db = SQLAlchemy(app)
@@ -66,9 +72,21 @@ def write():
 def main():
     return render_template('main.html')  # 메인 템플릿 렌더링
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 @app.route('/bloghome')
 def bloghome():
-    return render_template('bloghome.html')
+    all_posts = Post.query.order_by(Post.id.desc()).all()
+    posts_with_users = []
+    for post in all_posts:
+        user = User.query.get(post.user_id)
+        posts_with_users.append({
+            'post': post,
+            'username': user.username if user else '알 수 없는 사용자'
+        })
+    return render_template('bloghome.html', posts=posts_with_users)
 
 # 회원가입 페이지 및 처리 라우트
 @app.route('/join', methods=['GET', 'POST'])
@@ -116,17 +134,13 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-
-        # 로그인 체크
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id  # 세션에 사용자 ID 저장
             flash("성공적으로 로그인되었습니다.", 'success')
             return redirect(url_for('write'))
         else:
             flash("이메일 또는 비밀번호가 올바르지 않습니다.", 'error')
-            return redirect(url_for('login'))
-
-    return render_template('login.html')  # 로그인 템플릿 렌더링
+    return render_template('login.html')
 
 # 모든 사용자 목록을 확인하는 페이지 라우트
 @app.route('/users')
@@ -169,14 +183,14 @@ def add_hashtag():
 def create_post():
     try:
         if 'user_id' not in session:
-            return jsonify({'error': '로그인하지 않았습니다.'}), 401
+            return jsonify({'error': '로그인이 필요합니다.'}), 401
 
         content = request.json.get('content')
         hashtags = request.json.get('hashtags')
         images = request.json.get('images')
 
         if not content or not images:
-            return jsonify({'error': '내용이나 이미지가 비어 있습니다.'}), 400
+            return jsonify({'error': '내용과 이미지를 모두 입력해주세요.'}), 400
 
         user_id = session['user_id']
         new_post = Post(user_id=user_id, content=content, hashtags=hashtags, image_filename=', '.join(images))
@@ -186,12 +200,7 @@ def create_post():
     except Exception as e:
         db.session.rollback()
         app.logger.error(f'포스트 작성 중 오류 발생: {str(e)}')
-        return jsonify({'error': f'포스트 작성 중 오류 발생: {str(e)}'}), 500
-
-# 업로드된 이미지 확인 엔드포인트
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)  # 이미지 파일 전송
+        return jsonify({'error': '포스트 작성 중 오류가 발생했습니다. 다시 시도해 주세요.'}), 500
 
 # 포스트 보기 페이지 라우트
 @app.route('/posts')
