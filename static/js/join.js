@@ -35,4 +35,21 @@ document.addEventListener('DOMContentLoaded', function() {
             section.style.display = 'flex';
         });
     });
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('Preview-Image').src = e.target.result;
+            document.getElementById('Preview-Container').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('Confirm-Button').addEventListener('click', function() {
+    document.getElementById('Preview-Container').style.display = 'none';
+    document.getElementById('Completion-Container').style.display = 'block';
+});
 });

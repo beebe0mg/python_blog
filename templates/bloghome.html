@@ -5,29 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>얼렁뚱땅 블로그</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bloghome.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <main id="Home-Container">
         <section class="Text-Container">
-            <p id="Blog-Name">얼렁뚱땅 블로그</p>
+            <h1 id="Blog-Name">얼렁뚱땅 블로그</h1>
             <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
         </section>
 
         <section class="Posts-Container">
             {% for item in posts %}
-                <div class="post">
-                    <h2>포스트 #{{ item.post.id }}</h2>
-                    <p class="post-author">작성자: {{ item.username }}</p>
-                    <p class="post-content">{{ item.post.content }}</p>
-                    {% if item.post.hashtags %}
-                        <p class="post-hashtags">{{ item.post.hashtags }}</p>
-                    {% endif %}
-                    {% if item.post.image_filename %}
-                    {% for filename in item.post.image_filename.split(', ') %}
-                        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="포스트 이미지" class="post-image">
-                    {% endfor %}
+            <article class="post">
+                <h2 class="post-title">포스트 #{{ item.post.id }}</h2>
+                <p class="post-author">
+                    <i class="fas fa-user-circle"></i> {{ item.username }}
+                </p>
+                <p class="post-content">{{ item.post.content }}</p>
+                {% if item.post.hashtags %}
+                    <p class="post-hashtags">
+                        {% for tag in item.post.hashtags.split(',') %}
+                            <span class="hashtag">#{{ tag.strip() }}</span>
+                        {% endfor %}
+                    </p>
                 {% endif %}
-                </div>
+                {% if item.post.image_filename %}
+                    <div class="post-images">
+                        {% for filename in item.post.image_filename.split(', ') %}
+                            <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="포스트 이미지" class="post-image">
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </article>
+            {% else %}
+                <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
             {% endfor %}
         </section>
     </main>

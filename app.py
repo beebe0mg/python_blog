@@ -44,9 +44,7 @@ class Post(db.Model):
     hashtags = db.Column(db.String(500))
 
 # 데이터베이스 테이블 생성
-with app.app_context():
-    db.drop_all()  # 주의: 이 줄은 기존 데이터를 모두 삭제합니다
-    db.create_all()
+
 
 # 파일 확장자 검사 함수
 def allowed_file(filename):
@@ -193,7 +191,8 @@ def create_post():
             return jsonify({'error': '내용과 이미지를 모두 입력해주세요.'}), 400
 
         user_id = session['user_id']
-        new_post = Post(user_id=user_id, content=content, hashtags=hashtags, image_filename=', '.join(images))
+        image_filenames = [os.path.basename(image) for image in images]
+        new_post = Post(user_id=user_id, content=content, hashtags=hashtags, image_filename=', '.join(image_filenames))
         db.session.add(new_post)
         db.session.commit()
         return jsonify({'message': '포스트가 성공적으로 작성되었습니다.', 'redirect': url_for('bloghome')})
