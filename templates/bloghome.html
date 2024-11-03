@@ -21,7 +21,7 @@
                 <p class="post-author">
                     <i class="fas fa-user-circle"></i> {{ item.username }}
                 </p>
-                <p class="post-content">{{ item.post.content }}</p>
+                <p class="post-content" style="color: {{ item.post.color }};">{{ item.post.content }}</p>
                 {% if item.post.hashtags %}
                     <p class="post-hashtags">
                         {% for tag in item.post.hashtags.split(',') %}
@@ -37,9 +37,9 @@
                     </div>
                 {% endif %}
             </article>
-            {% else %}
-                <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
-            {% endfor %}
+        {% else %}
+            <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
+        {% endfor %}
         </section>
     </main>
 </body>

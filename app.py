@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from PIL import Image
+from flask_migrate import Migrate
 
 # 환경 변수 로드
 load_dotenv()
@@ -24,6 +25,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 
 # SQLAlchemy 객체 생성
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # 허용된 파일 확장자
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -42,9 +44,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)  # 이 줄이 추가되었는지 확인
     image_filename = db.Column(db.String(200))
     hashtags = db.Column(db.String(500))
-
-# 데이터베이스 테이블 생성
-
+    color = db.Column(db.String(7), default='#000000')
 
 # 파일 확장자 검사 함수
 def allowed_file(filename):
@@ -69,10 +69,6 @@ def write():
 @app.route('/main')
 def main():
     return render_template('main.html')  # 메인 템플릿 렌더링
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/bloghome')
 def bloghome():
@@ -186,13 +182,15 @@ def create_post():
         content = request.json.get('content')
         hashtags = request.json.get('hashtags')
         images = request.json.get('images')
+        color = request.json.get('color', '#000000')  # 기본값은 검정색
 
         if not content or not images:
             return jsonify({'error': '내용과 이미지를 모두 입력해주세요.'}), 400
 
         user_id = session['user_id']
         image_filenames = [os.path.basename(image) for image in images]
-        new_post = Post(user_id=user_id, content=content, hashtags=hashtags, image_filename=', '.join(image_filenames))
+        new_post = Post(user_id=user_id, content=content, hashtags=hashtags, 
+                        image_filename=', '.join(image_filenames), color=color)
         db.session.add(new_post)
         db.session.commit()
         return jsonify({'message': '포스트가 성공적으로 작성되었습니다.', 'redirect': url_for('bloghome')})
@@ -200,17 +198,6 @@ def create_post():
         db.session.rollback()
         app.logger.error(f'포스트 작성 중 오류 발생: {str(e)}')
         return jsonify({'error': '포스트 작성 중 오류가 발생했습니다. 다시 시도해 주세요.'}), 500
-
-# 포스트 보기 페이지 라우트
-@app.route('/posts')
-def view_posts():
-    all_posts = Post.query.all()  # 모든 포스트 가져오기
-    return render_template('posts.html', posts=all_posts)  # posts.html 템플릿 렌더링
-
-# 애플리케이션 실행
-if __name__ == '__main__':
-    app.run(debug=True)  # 디버그 모드로 실행
-
 
 # 업로드된 이미지 확인 엔드포인트
 @app.route('/uploads/<filename>')
@@ -224,4 +211,6 @@ def view_posts():
 
 # 애플리케이션 실행
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)  # 디버그 모드로 실행

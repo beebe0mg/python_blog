@@ -183,7 +183,9 @@
                 
                         // 게시하기 버튼 클릭 시 데이터 전송
                         document.getElementById('postButton').addEventListener('click', function() {
-                            const smallContent = document.getElementById('SmallContent1').value;
+                            const smallContent = document.getElementById('SmallContent1');
+                            const content = smallContent.value;
+                            const color = smallContent.style.color || '#000000';
                             const hashtagsString = hashtags.join(', ');
                             const images = Array.from(imagePreview.querySelectorAll('img')).map(img => img.src.split('/').pop());
                         
@@ -193,7 +195,8 @@
                                     'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
-                                    content: smallContent,
+                                    content: content,
+                                    color: color,
                                     hashtags: hashtagsString,
                                     images: images
                                 })
