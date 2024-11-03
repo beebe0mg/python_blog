@@ -36,11 +36,26 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                <div class="comments-section">
+                    <h4>댓글</h4>
+                    <div class="comments-list">
+                        {% for comment in item.post.comments %}
+                            <div class="comment">
+                                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <form class="comment-form" data-post-id="{{ item.post.id }}">
+                        <textarea class="comment-input" placeholder="댓글을 입력하세요"></textarea>
+                        <button type="submit" class="comment-submit">댓글 작성</button>
+                    </form>
+                </div>
             </article>
-        {% else %}
-            <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
-        {% endfor %}
+            {% else %}
+                <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
+            {% endfor %}
         </section>
     </main>
+    <script src="{{ url_for('static', filename='js/bloghome.js') }}"></script>
 </body>
 </html>

@@ -51,6 +51,35 @@ body {
     margin-bottom: 20px;
 }
 
+.Text-Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.Button-Container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+#Join-Button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Pretendard', sans-serif;
+    color: #8FC9FF;
+    font-size: 12px;
+    font-weight: 400;
+    width: 130px;
+    height: 40px;
+    border-radius: 40px;
+    border: 1px solid #8FC9FF;
+    background: rgba(255, 255, 255, 0.80);
+}
+
 #Start-Button {
     display: flex;
     align-items: center;
@@ -64,13 +93,6 @@ body {
     border-radius: 40px;
     border: 1px solid #FFFF;
     background: rgba(143, 201, 255, 0.80);
-}
-
-.Text-Container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
 }
 
 a {

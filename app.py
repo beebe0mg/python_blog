@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from PIL import Image
 from flask_migrate import Migrate
+from datetime import datetime
 
 # 환경 변수 로드
 load_dotenv()
@@ -45,6 +46,16 @@ class Post(db.Model):
     image_filename = db.Column(db.String(200))
     hashtags = db.Column(db.String(500))
     color = db.Column(db.String(7), default='#000000')
+    
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    
+    user = db.relationship('User', backref=db.backref('comments', lazy=True))
+    post = db.relationship('Post', backref=db.backref('comments', lazy=True))
 
 # 파일 확장자 검사 함수
 def allowed_file(filename):
@@ -70,6 +81,7 @@ def write():
 def main():
     return render_template('main.html')  # 메인 템플릿 렌더링
 
+# bloghome 라우트 수정
 @app.route('/bloghome')
 def bloghome():
     all_posts = Post.query.order_by(Post.id.desc()).all()
@@ -78,7 +90,8 @@ def bloghome():
         user = User.query.get(post.user_id)
         posts_with_users.append({
             'post': post,
-            'username': user.username if user else '알 수 없는 사용자'
+            'username': user.username if user else '알 수 없는 사용자',
+            'comments': post.comments  # 댓글 정보 추가
         })
     return render_template('bloghome.html', posts=posts_with_users)
 
@@ -130,12 +143,10 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id  # 세션에 사용자 ID 저장
-            flash("성공적으로 로그인되었습니다.", 'success')
             return redirect(url_for('write'))
         else:
             flash("이메일 또는 비밀번호가 올바르지 않습니다.", 'error')
     return render_template('login.html')
-
 # 모든 사용자 목록을 확인하는 페이지 라우트
 @app.route('/users')
 def users():
@@ -208,6 +219,28 @@ def uploaded_file(filename):
 def view_posts():
     all_posts = Post.query.all()  # 모든 포스트 가져오기
     return render_template('posts.html', posts=all_posts)  # posts.html 템플릿 렌더링
+
+# 댓글 작성 라우트 추가
+@app.route('/post/<int:post_id>/comment', methods=['POST'])
+def add_comment(post_id):
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'error': '로그인이 필요합니다.'}), 401
+    
+    content = request.json.get('content')
+    if not content:
+        return jsonify({'success': False, 'error': '댓글 내용을 입력해주세요.'}), 400
+    
+    user = User.query.get(session['user_id'])
+    new_comment = Comment(content=content, user_id=user.id, post_id=post_id)
+    db.session.add(new_comment)
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'username': user.username,
+        'content': content
+    })
+
 
 # 애플리케이션 실행
 if __name__ == '__main__':

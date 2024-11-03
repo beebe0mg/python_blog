@@ -12,6 +12,11 @@
         <section class="Text-Container">
             <p id="Blog-Name">얼렁뚱땅 블로그</p>
             <p id="Blog-Slogan">" 당신의 특별한 순간을 소중히 기록하세요. "</p>
+        </section>
+        <section class="Button-Container">
+            <a href="{{ url_for('bloghome') }}">
+                <input id="Join-Button" type="button" value="글 보러 가기"/>
+            </a>
             <a href="{{ url_for('main') }}">
                 <input id="Start-Button" type="button" value="글 작성하기"/>
             </a>
