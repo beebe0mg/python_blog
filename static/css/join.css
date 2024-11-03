@@ -181,6 +181,8 @@ label > i {
 
 #Completion-Container p {
     font-size: 12px;
+    margin-top: -16px;
+    margin-left: 19px;
 }
 
 .flash-message {

@@ -128,11 +128,14 @@ def join():
             new_user = User(username=username, email=email, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
+            
+            # 새로 생성된 사용자로 로그인
+            session['user_id'] = new_user.id
             return redirect(url_for('write'))
 
         return redirect(url_for('join'))
 
-    return render_template('join.html')  # 회원가입 템플릿 렌더링
+    return render_template('join.html')
 
 # 로그인 페이지 및 처리 라우트
 @app.route('/login', methods=['GET', 'POST'])
