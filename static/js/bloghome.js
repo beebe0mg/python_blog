@@ -31,3 +31,25 @@ document.querySelectorAll('.comment-form').forEach(form => {
         .catch(error => console.error('Error:', error));
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.hashtag').forEach(function(hashtag) {
+        hashtag.addEventListener('click', function() {
+            var postUserId = this.getAttribute('data-user-id');
+            var hashtag = this.getAttribute('data-hashtag');
+            
+            if (currentUserId == postUserId) {
+                // 사용자가 자신의 게시물의 해시태그를 클릭한 경우
+                openChatRoom(hashtag);
+            } else {
+                // 다른 사용자의 게시물의 해시태그를 클릭한 경우
+                alert("자신이 작성한 게시물의 해시태그만 채팅방을 열 수 있습니다.");
+            }
+        });
+    });
+});
+
+function openChatRoom(hashtag) {
+    // 채팅방을 여는 로직
+    window.location.href = `/chat/${hashtag}`;
+}

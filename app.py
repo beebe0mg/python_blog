@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from flask_migrate import Migrate
 from datetime import datetime
+from flask_socketio import SocketIO, emit, join_room, leave_room
 
 # 환경 변수 로드
 load_dotenv()
@@ -19,6 +20,7 @@ app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'uploads')  # 업로드 폴
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'  # 데이터베이스 URI
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'uploads')
+socketio = SocketIO(app)
 
 # 업로드 폴더가 없으면 생성
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -107,7 +109,6 @@ def join():
         if not password:
             flash("비밀번호를 입력해 주세요.")
             return redirect(url_for('join'))
-        
         if len(password) < 6:
             flash("비밀번호는 6자리 이상이어야 합니다.")
             return redirect(url_for('join'))
@@ -128,14 +129,15 @@ def join():
             new_user = User(username=username, email=email, password=hashed_password)
             db.session.add(new_user)
             db.session.commit()
-            
+
             # 새로 생성된 사용자로 로그인
-            session['user_id'] = new_user.id
-            return redirect(url_for('write'))
+            session.clear()  # 이전 세션 데이터 삭제
+            session['user_id'] = new_user.id  # 새 사용자 ID 저장
+            session['username'] = new_user.username  # 새 사용자 이름 저장
 
-        return redirect(url_for('join'))
+            return redirect(url_for('write'))  # 커뮤니티 기능으로 리디렉션
 
-    return render_template('join.html')
+    return render_template('join.html')  # 회원가입 템플릿 렌더링
 
 # 로그인 페이지 및 처리 라우트
 @app.route('/login', methods=['GET', 'POST'])
@@ -144,12 +146,19 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
+        
         if user and check_password_hash(user.password, password):
+            session.clear()  # 이전 세션 데이터 삭제
             session['user_id'] = user.id  # 세션에 사용자 ID 저장
-            return redirect(url_for('write'))
+            session['username'] = user.username  # 세션에 사용자 이름 저장
+            
+            # flash("성공적으로 로그인되었습니다.", 'success')
+            return redirect(url_for('write'))  # 커뮤니티 기능으로 리디렉션
         else:
             flash("이메일 또는 비밀번호가 올바르지 않습니다.", 'error')
-    return render_template('login.html')
+
+    return render_template('login.html')  # 로그인 템플릿 렌더링
+
 # 모든 사용자 목록을 확인하는 페이지 라우트
 @app.route('/users')
 def users():
@@ -243,10 +252,46 @@ def add_comment(post_id):
         'username': user.username,
         'content': content
     })
+    
+@app.route('/chat/<hashtag>')
+def chat_room(hashtag):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    post = Post.query.filter(Post.hashtags.contains(hashtag), Post.user_id == user_id).first()
+    
+    if not post:
+        flash("해당 해시태그를 가진 자신의 게시물이 없습니다.")
+        return redirect(url_for('bloghome'))
+    
+    return render_template('chat_room.html', hashtag=hashtag)
+
+@socketio.on('join')
+def on_join(data):
+    username = data['username']  # 사용자의 이름을 가져옵니다.
+    room = data['room']
+    join_room(room)
+    
+    # 사용자 이름을 포함한 메시지로 변경
+    emit('status', {'msg': f'<span class="username">{username}</span>님이 채팅방에 들어왔습니다.'}, room=room)
+    
+@socketio.on('text')
+def text(data):
+    room = data['room']
+    emit('message', data, room=room)
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    emit('status', {'msg': f'{username} has left the room.'}, room=room)
 
 
 # 애플리케이션 실행
 if __name__ == '__main__':
+    socketio.run(app, debug=True)
     with app.app_context():
         db.create_all()
     app.run(debug=True)  # 디버그 모드로 실행

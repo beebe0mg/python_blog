@@ -94,17 +94,20 @@ body::-webkit-scrollbar {
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 24px;
+    cursor: pointer;
 }
 
 .post-content {
     margin-bottom: 15px;
     font-size: 16px;
+    cursor: pointer;
     font-family: 'HakgyoansimBadasseugi', sans-serif;
     line-height: 1.5;
     color: #444;
 }
 
 .post-hashtags {
+    cursor: pointer;
     margin-bottom: 15px;
     font-size: 14px;
 }
@@ -141,6 +144,7 @@ body::-webkit-scrollbar {
     color: #666;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .post-author i {

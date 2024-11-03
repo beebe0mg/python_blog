@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅방 - #{{ hashtag }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_room.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            #{{ hashtag }} 채팅방
+        </div>
+        <div id="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="메시지를 입력하세요">
+            <button id="send-button" onclick="sendMessage()">전송</button>
+        </div>
+    </div>
+
+    <script>
+        var socket = io();
+        var username = "{{ session['username'] }}";  // 세션에서 사용자 이름 가져오기
+
+        // 방에 입장할 때 사용자 이름과 방 정보를 전송
+        socket.emit('join', {username: username, room: '{{ hashtag }}'});
+
+        function sendMessage() {
+            var message = document.getElementById('chat-input').value;
+            if (message.trim() !== '') {
+                socket.emit('text', {username: username, msg: message, room: '{{ hashtag }}'});
+                document.getElementById('chat-input').value = '';
+            }
+        }
+
+        socket.on('message', function(data) {
+            var messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + (data.username === username ? 'sent' : 'received');
+            messageDiv.textContent = data.username + ': ' + data.msg; // data.username이 올바른 닉네임인지 확인
+            document.getElementById('chat-messages').appendChild(messageDiv);
+            scrollToBottom();
+        });
+
+        socket.on('status', function(data) {
+            var statusDiv = document.createElement('div');
+            statusDiv.className = 'status-message';
+            statusDiv.innerHTML = data.msg; // HTML 해석
+            document.getElementById('chat-messages').appendChild(statusDiv);
+            scrollToBottom();
+        });
+
+        function scrollToBottom() {
+            var chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
