@@ -41,9 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentUserId == postUserId) {
                 // 사용자가 자신의 게시물의 해시태그를 클릭한 경우
                 openChatRoom(hashtag);
-            } else {
-                // 다른 사용자의 게시물의 해시태그를 클릭한 경우
-                alert("자신이 작성한 게시물의 해시태그만 채팅방을 열 수 있습니다.");
             }
         });
     });

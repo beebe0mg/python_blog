@@ -258,13 +258,6 @@ def chat_room(hashtag):
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    user_id = session['user_id']
-    post = Post.query.filter(Post.hashtags.contains(hashtag), Post.user_id == user_id).first()
-    
-    if not post:
-        flash("해당 해시태그를 가진 자신의 게시물이 없습니다.")
-        return redirect(url_for('bloghome'))
-    
     return render_template('chat_room.html', hashtag=hashtag)
 
 @socketio.on('join')

@@ -16,55 +16,60 @@
 
         <section class="Posts-Container">
             {% for item in posts %}
-            <article class="post">
-                <h2 class="post-title">포스트 #{{ item.post.id }}</h2>
-                <p class="post-author">
-                    <i class="fas fa-user-circle"></i> {{ item.username }}
+        <article class="post">
+            <h2 class="post-title">포스트 #{{ item.post.id }}</h2>
+            <p class="post-author">
+                <i class="fas fa-user-circle"></i> {{ item.username }}
+            </p>
+            <p class="post-content" style="color: {{ item.post.color }};">{{ item.post.content }}</p>
+            {% if item.post.hashtags %}
+                <p class="post-hashtags">
+                    {% for tag in item.post.hashtags.split(',') %}
+                        <span class="hashtag" 
+                            data-hashtag="{{ tag.strip() }}"
+                            data-post-id="{{ item.post.id }}" 
+                            data-user-id="{{ item.post.user_id }}"
+                            onclick="openChat('{{ tag.strip() }}')">
+                            #{{ tag.strip() }}
+                        </span>
+                    {% endfor %}
                 </p>
-                <p class="post-content" style="color: {{ item.post.color }};">{{ item.post.content }}</p>
-                {% if item.post.hashtags %}
-                    <p class="post-hashtags">
-                        {% for tag in item.post.hashtags.split(',') %}
-                            <span class="hashtag" 
-                                data-hashtag="{{ tag.strip() }}"
-                                data-post-id="{{ item.post.id }}" 
-                                data-user-id="{{ item.post.user_id }}">
-                                #{{ tag.strip() }}
-                            </span>
-                        {% endfor %}
-                    </p>
-                {% endif %}
-                {% if item.post.image_filename %}
-                    <div class="post-images">
-                        {% for filename in item.post.image_filename.split(', ') %}
-                            <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="포스트 이미지" class="post-image">
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <div class="comments-section">
-                    <h4>댓글</h4>
-                    <div class="comments-list">
-                        {% for comment in item.post.comments %}
-                            <div class="comment">
-                                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <form class="comment-form" data-post-id="{{ item.post.id }}">
-                        <textarea class="comment-input" placeholder="댓글을 입력하세요"></textarea>
-                        <button type="submit" class="comment-submit">댓글 작성</button>
-                    </form>
+            {% endif %}
+            {% if item.post.image_filename %}
+                <div class="post-images">
+                    {% for filename in item.post.image_filename.split(', ') %}
+                        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="포스트 이미지" class="post-image">
+                    {% endfor %}
                 </div>
-            </article>
-            {% else %}
-                <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
-            {% endfor %}
+            {% endif %}
+            <div class="comments-section">
+                <h4>댓글</h4>
+                <div class="comments-list">
+                    {% for comment in item.post.comments %}
+                        <div class="comment">
+                            <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <form class="comment-form" data-post-id="{{ item.post.id }}">
+                    <textarea class="comment-input" placeholder="댓글을 입력하세요"></textarea>
+                    <button type="submit" class="comment-submit">댓글 작성</button>
+                </form>
+            </div>
+        </article>
+        {% else %}
+            <p class="no-posts">아직 작성된 포스트가 없습니다.</p>
+        {% endfor %}
         </section>
     </main>
     <a href="{{ url_for('main') }}" class="write-button">글 작성하기</a>
     <script src="{{ url_for('static', filename='js/bloghome.js') }}"></script>
     <script>
         var currentUserId = {{ session.get('user_id', 'null') }};
+        function openChat(hashtag) {
+            // 채팅방으로 이동
+            window.location.href = "/chat/" + hashtag;  // 해시태그에 따라 채팅방으로 이동
+        }
     </script>
 </body>
 </html>
