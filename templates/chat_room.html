@@ -12,7 +12,13 @@
         <div class="chat-header">
             #{{ hashtag }} 채팅방
         </div>
-        <div id="chat-messages"></div>
+        <div id="chat-messages">
+            {% for msg in messages %}
+        <div class="message">
+            <strong>{{ msg.username }}</strong>: {{ msg.message }}
+        </div>
+    {% endfor %}
+        </div>
         <div class="chat-input">
             <input type="text" id="chat-input" placeholder="메시지를 입력하세요">
             <button id="send-button" onclick="sendMessage()">전송</button>
@@ -36,10 +42,9 @@
 
         socket.on('message', function(data) {
             var messageDiv = document.createElement('div');
-            messageDiv.className = 'message ' + (data.username === username ? 'sent' : 'received');
-            messageDiv.textContent = data.username + ': ' + data.msg; // data.username이 올바른 닉네임인지 확인
+            messageDiv.className = 'message';
+            messageDiv.innerHTML = `<strong>${data.username}</strong>: ${data.msg}`;
             document.getElementById('chat-messages').appendChild(messageDiv);
-            scrollToBottom();
         });
 
         socket.on('status', function(data) {

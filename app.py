@@ -58,6 +58,13 @@ class Comment(db.Model):
     
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
     post = db.relationship('Post', backref=db.backref('comments', lazy=True))
+    
+class ChatMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room = db.Column(db.String(100), nullable=False)  # 방 이름
+    username = db.Column(db.String(150), nullable=False)  # 사용자 이름
+    message = db.Column(db.Text, nullable=False)  # 메시지 내용
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)  # 타임스탬프
 
 # 파일 확장자 검사 함수
 def allowed_file(filename):
@@ -257,8 +264,11 @@ def add_comment(post_id):
 def chat_room(hashtag):
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
+    # 해당 해시태그의 이전 채팅 메시지 가져오기
+    messages = ChatMessage.query.filter_by(room=hashtag).order_by(ChatMessage.timestamp).all()
     
-    return render_template('chat_room.html', hashtag=hashtag)
+    return render_template('chat_room.html', hashtag=hashtag, messages=messages)
 
 @socketio.on('join')
 def on_join(data):
@@ -272,6 +282,14 @@ def on_join(data):
 @socketio.on('text')
 def text(data):
     room = data['room']
+    username = data['username']
+    message = data['msg']
+
+    # 데이터베이스에 메시지 저장
+    chat_message = ChatMessage(room=room, username=username, message=message)
+    db.session.add(chat_message)
+    db.session.commit()
+
     emit('message', data, room=room)
 
 @socketio.on('leave')

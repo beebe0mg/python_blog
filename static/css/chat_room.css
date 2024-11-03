@@ -28,7 +28,7 @@ body {
     margin: 20px auto;
     background-color: #ffffff;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -54,7 +54,7 @@ body {
 
 .message {
     font-size: 14px; /* 글씨 크기 조정 */
-    padding: 8px 12px; /* 패딩 조정 */
+    padding: 10px; /* 패딩 조정 */
     border-radius: 15px; /* 모서리 둥글게 */
     max-width: 70%; /* 최대 너비 설정 */
     margin-bottom: 10px; /* 메시지 간격 */
@@ -62,57 +62,56 @@ body {
 
 .message.sent {
     align-self: flex-end;
-    background-color: #e3f2fd;
-    color: #0288d1;
+    background-color: #e3f2fd; /* 보낸 메시지 배경색 */
+    color: #0288d1; /* 보낸 메시지 글자색 */
 }
 
 .message.received {
     align-self: flex-start;
-    background-color: #bbdefb;
-    color: #01579b;
+    background-color: #bbdefb; /* 받은 메시지 배경색 */
+    color: #01579b; /* 받은 메시지 글자색 */
 }
 
 .chat-input {
     display: flex;
     padding: 15px;
-    background-color: #f5f5f5;
-    font-size: 12px;
+    background-color: #f5f5f5; /* 입력창 배경색 */
 }
 
 #chat-input {
     flex-grow: 1;
-    padding: 10px;
-    border: 1px solid #0288d1;
-    border-radius: 20px;
-    font-family: 'Pretendard', sans-serif;
-    font-size: 12px;
+    padding: 10px; /* 패딩 조정 */
+    border: 1px solid #0288d1; /* 테두리 색상 */
+    border-radius: 20px; /* 모서리 둥글게 */
+    font-family: 'Pretendard', sans-serif; 
+    font-size: 14px; /* 글씨 크기 조정 */
 }
 
 #send-button {
-    background-color: #0288d1;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    margin-left: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-family: 'Pretendard', sans-serif;
-    font-size: 13px;
-    transition: background-color 0.3s ease;
+    background-color: #0288d1; /* 버튼 배경색 */
+    color: #ffffff; /* 버튼 글자색 */
+    border: none; 
+    padding: 10px 20px; 
+    margin-left: 10px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-family: 'Pretendard', sans-serif; 
 }
 
 #send-button:hover {
-    background-color: #01579b;
+   background-color: #01579b; /* 버튼 호버 시 색상 변경 */
+   transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
 }
 
 .status-message {
-    text-align: center;
-    color: #757575;
-    font-style: italic;
-    margin: 10px 0;
+   text-align:center; 
+   color:#757575; 
+   font-style:italic; 
+   margin-top :10px ; 
+   margin-bottom :10px ; 
 }
 
 .username {
-    color: #0288d1; /* 원하는 색상으로 조정 */
-    font-weight: bold; /* 필요에 따라 굵게 설정 */
+   color:#0288d1; /* 사용자 이름 색상 설정 */ 
+   font-weight:bold; /* 사용자 이름 굵게 설정 */ 
 }
