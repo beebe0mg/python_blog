@@ -25,6 +25,8 @@
         </div>
     </div>
 
+    <a href="{{ url_for('bloghome') }}" class="home-button">블로그 홈</a>
+
     <script>
         var socket = io();
         var username = "{{ session['username'] }}";  // 세션에서 사용자 이름 가져오기

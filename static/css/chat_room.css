@@ -57,7 +57,6 @@ body {
     padding: 10px; /* 패딩 조정 */
     border-radius: 15px; /* 모서리 둥글게 */
     max-width: 70%; /* 최대 너비 설정 */
-    margin-bottom: 10px; /* 메시지 간격 */
 }
 
 .message.sent {
@@ -114,4 +113,21 @@ body {
 .username {
    color:#0288d1; /* 사용자 이름 색상 설정 */ 
    font-weight:bold; /* 사용자 이름 굵게 설정 */ 
+}
+.home-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #0288d1;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    z-index: 1000;
+}
+
+.home-button:hover {
+    background-color: #01579b;
 }
